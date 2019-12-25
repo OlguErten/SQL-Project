@@ -1,7 +1,7 @@
 drop TABLE "MANF" CASCADE CONSTRAINTS;
 drop TABLE "CUSTOMER" CASCADE CONSTRAINTS;
-drop TABLE "CAR" CASCADE CONSTRAINTS;
 drop TABLE "EMPLOYEE" CASCADE CONSTRAINTS;
+drop TABLE "CAR" CASCADE CONSTRAINTS;
 drop TABLE "ORDERS" CASCADE CONSTRAINTS;
 drop TABLE "PAYMENT" CASCADE CONSTRAINTS;
 drop TABLE "LOAN" CASCADE CONSTRAINTS;
@@ -30,14 +30,6 @@ CREATE TABLE customer
    phone NUMBER(13,0) NOT NULL,
    CONSTRAINT customer_pk PRIMARY KEY(customerid) );
 
-CREATE TABLE car
-(  carid NUMBER(2,0) NOT NULL,
-   carbrand VARCHAR2(10) NOT NULL,
-   carmodel VARCHAR2(15) NOT NULL,
-   carweight NUMBER(4,0) NOT NULL,
-   caryear NUMBER(4,0) NOT NULL,
-   CONSTRAINT car_pk PRIMARY KEY(carid) );
-
 CREATE TABLE employee
 (  employeeid NUMBER(4,0) NOT NULL,
    firstname VARCHAR2(15) NOT NULL,
@@ -49,6 +41,16 @@ CREATE TABLE employee
    city VARCHAR2(15) NOT NULL,
    phone NUMBER(13,0) NOT NULL,
    CONSTRAINT employee_pk PRIMARY KEY(employeeid) );
+   
+CREATE TABLE car
+(  carid NUMBER(2,0) NOT NULL,
+   carbrand VARCHAR2(10) NOT NULL,
+   carmodel VARCHAR2(15) NOT NULL,
+   carweight NUMBER(4,0) NOT NULL,
+   caryear NUMBER(4,0) NOT NULL,
+   employeeid NUMBER(4,0) NOT NULL,
+   CONSTRAINT car_pk PRIMARY KEY(carid),
+   CONSTRAINT car_fk FOREIGN KEY(employeeid) REFERENCES employee(employeeid) ON DELETE CASCADE);
    
 CREATE TABLE orders
 (  orderid NUMBER(4,0) NOT NULL,
@@ -118,14 +120,6 @@ CREATE TABLE bills
    CONSTRAINT bill_pk PRIMARY KEY (billid),
    CONSTRAINT bill_fk FOREIGN KEY(paymentnumber) REFERENCES payment(paymentnumber) ON DELETE CASCADE,
    CONSTRAINT bill_fk2 FOREIGN KEY(manfid) REFERENCES manf(manfid) ON DELETE CASCADE );
-   
-INSERT INTO car VALUES (1, 'Mercedes', 'Vito' , 1100 , 2017 );
-INSERT INTO car VALUES (2, 'Volkswagen', 'Transporter' , 1300 , 2018 );
-INSERT INTO car VALUES (3, 'Fiat', 'Doblo' , 850 , 2015 );
-INSERT INTO car VALUES (4, 'Fiat', 'Doblo' , 1100 , 2017 );
-INSERT INTO car VALUES (5, 'Renault', 'Kangoo' , 600 , 2016 );
-INSERT INTO car VALUES (6, 'Mercedes', 'Vito' , 1100 , 2017 );
-INSERT INTO car VALUES (7, 'Volkswagen', 'Transporter' , 1300 , 2018 );
 
 INSERT INTO manf VALUES (1, 'Coca Cola', 'Muhtar Kent', 'CEO', 'OSB Mah Dudullu - Ümraniye', 'İstanbul', '2165284000');
 INSERT INTO manf VALUES (2, 'Pepsi', 'Esra İREN', 'Genel Müdür', 'Tekfen Tower Büyükdere Cad 4.Levent', 'İstanbul', '08502220737');
@@ -204,6 +198,14 @@ INSERT INTO employee VALUES (12, 'Doğan', 'Can', TO_DATE('02/April/2016','DD/MO
 INSERT INTO employee VALUES (13, 'Umut', 'Pehlivan', TO_DATE('26/April/2015','DD/MON/YY'), 'Loader', 2100, 'Çankaya', 'Ankara', 5535216324);
 INSERT INTO employee VALUES (14, 'Ferit Acar', 'Savacı', TO_DATE('16/April/2014','DD/MON/YY'), 'Owner', 1700, 'Urla', 'İzmir', 5224164524);
 INSERT INTO employee VALUES (15, 'Enver', 'Tatlıcıoğlu', TO_DATE('24/April/2014','DD/MON/YY'), 'Loader',  2000, 'Merkez', 'Manisa', 5556241324);
+
+INSERT INTO car VALUES (1, 'Mercedes', 'Vito' , 1100 , 2017, 5 );
+INSERT INTO car VALUES (2, 'Volkswagen', 'Transporter' , 1300 , 2018, 8 );
+INSERT INTO car VALUES (3, 'Fiat', 'Doblo' , 850 , 2015, 10 );
+INSERT INTO car VALUES (4, 'Fiat', 'Doblo' , 1100 , 2017 , 5 );
+INSERT INTO car VALUES (5, 'Renault', 'Kangoo' , 600 , 2016 ,8 );
+INSERT INTO car VALUES (6, 'Mercedes', 'Vito' , 1100 , 2017, 10 );
+INSERT INTO car VALUES (7, 'Volkswagen', 'Transporter' , 1300 , 2018, 5 );
 
 INSERT INTO customer VALUES (1, 'Şaban Usta', 'Ali Erten' , 'Sahibi' , 'Konak Rustem Mah. No 37' , 'İzmir' , '5546022588');
 INSERT INTO customer VALUES (2, 'Olala', 'Ali Çakır' , 'Sahibi' , 'Konak Torasan Mah. No 25' , 'İzmir' , '5336043588');
